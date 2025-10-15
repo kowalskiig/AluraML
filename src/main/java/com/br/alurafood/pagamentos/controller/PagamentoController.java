@@ -2,6 +2,7 @@ package com.br.alurafood.pagamentos.controller;
 
 import com.br.alurafood.pagamentos.dto.PagamentoDTO;
 import com.br.alurafood.pagamentos.service.PagamentoService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
+    @CircuitBreaker(name = "atualizaPedido", fallbackMethod = "")
     public ResponseEntity<PagamentoDTO> atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid PagamentoDTO dto) {
         PagamentoDTO atualizado = service.atualizarPagamento(id, dto);
         return ResponseEntity.ok(atualizado);
